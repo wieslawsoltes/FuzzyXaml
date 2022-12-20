@@ -68,6 +68,35 @@ public class TestCase
     }
 }
 
+public record struct TestCasesKey(int Level, int Index);
+
+public class TestCasesDictionary
+{
+    private Dictionary<TestCasesKey, List<TestCase>> _testCasesDictionary = new ();
+
+    public void Add(TestCasesKey key, TestCase testCase)
+    {
+        if (_testCasesDictionary.TryGetValue(key, out var testCases))
+        {
+            testCases.Add(testCase);
+        }
+        else
+        {
+            _testCasesDictionary[key] = new List<TestCase> {testCase};
+        }
+    }
+
+    public List<TestCase>? Get(TestCasesKey key)
+    {
+        if (_testCasesDictionary.TryGetValue(key, out var testCases))
+        {
+            return testCases;
+        }
+
+        return null;
+    }
+}
+
 public partial class MainWindow : Window
 {
     public MainWindow()
@@ -82,14 +111,11 @@ public partial class MainWindow : Window
         if (e.Key == Key.F5)
         {
             var testCases = GenerateTestCases();
-            if (testCases.Count > 0)
-            {
-                ExecuteTestCases(testCases);
-            }
+            ExecuteTestCases(testCases);
         }
     }
 
-    private void ExecuteTestCases(List<TestCase> testCases)
+    private void ExecuteTestCases(TestCasesDictionary testCasesDictionary)
     {
         var level = 0;
         var controls = this.GetVisualDescendants().OfType<Control>().ToList();
@@ -97,12 +123,14 @@ public partial class MainWindow : Window
         for (var index = 0; index < controls.Count; index++)
         {
             var control = controls[index];
+            var key = new TestCasesKey(level, index);
 
             // Console.WriteLine($"[{level}:{index}] {control.GetType().FullName}");
 
-            foreach (var testCase in testCases)
+            var testCases = testCasesDictionary.Get(key);
+            if (testCases is { })
             {
-                if (testCase.Level == level && testCase.Index == index)
+                foreach (var testCase in testCases)
                 {
                     testCase.Action?.Execute(control);
                 }
@@ -110,15 +138,16 @@ public partial class MainWindow : Window
         }
     }
 
-    private List<TestCase> GenerateTestCases()
+    private TestCasesDictionary GenerateTestCases()
     {
-        var testCases = new List<TestCase>();
+        var testCasesDictionary = new TestCasesDictionary();
         var level = 0;
         var controls = this.GetVisualDescendants().OfType<Control>().ToList();
 
         for (var index = 0; index < controls.Count; index++)
         {
             var control = controls[index];
+            var key = new TestCasesKey(level, index);
 
             // Console.WriteLine($"[{level}:{index}] {control.GetType().FullName}");
 
@@ -127,19 +156,19 @@ public partial class MainWindow : Window
                 case TextBox:
                 {
                     // Console.WriteLine($"[{nameof(TextBox)}.{nameof(TextBox.Text)}]");
-                    testCases.Add(new TestCase(level, index, new TextBoxSetTextPropertyTestAction("Random Text")));
+                    testCasesDictionary.Add(key, new TestCase(level, index, new TextBoxSetTextPropertyTestAction("Random Text")));
                     break;
                 }
                 case Button:
                 {
                     // Console.WriteLine($"[{nameof(Button)}.{nameof(Button.Command)}]");
-                    testCases.Add(new TestCase(level, index, new ButtonExecuteCommandTestAction(null)));
+                    testCasesDictionary.Add(key, new TestCase(level, index, new ButtonExecuteCommandTestAction(null)));
                     break;
                 }
             }
         }
 
-        return testCases;
+        return testCasesDictionary;
     }
 
     public void SomeMethod()

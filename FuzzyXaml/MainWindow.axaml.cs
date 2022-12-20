@@ -144,6 +144,6 @@ public partial class MainWindow : Window
 
     public void SomeMethod()
     {
-
+        ClickMeButton.Content = "Clicked!";
     }
 }

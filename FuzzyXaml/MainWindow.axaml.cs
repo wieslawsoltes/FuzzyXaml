@@ -68,11 +68,11 @@ public class TestCase
     }
 }
 
-public record struct TestCasesKey(int Level, int Index);
+public readonly record struct TestCasesKey(int Level, int Index);
 
 public class TestCasesDictionary
 {
-    private Dictionary<TestCasesKey, List<TestCase>> _testCasesDictionary = new ();
+    private readonly Dictionary<TestCasesKey, List<TestCase>> _testCasesDictionary = new ();
 
     public void Add(TestCasesKey key, TestCase testCase)
     {

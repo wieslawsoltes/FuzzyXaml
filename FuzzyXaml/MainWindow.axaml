@@ -9,7 +9,8 @@
         WindowStartupLocation="CenterScreen">
   <StackPanel>
     <TextBox Text="Hello" />
-    <Button Content="Click Me"
+    <Button Name="ClickMeButton" 
+            Content="Click Me"
             Command="{Binding $parent[Window].SomeMethod}" />
   </StackPanel>
 </Window>

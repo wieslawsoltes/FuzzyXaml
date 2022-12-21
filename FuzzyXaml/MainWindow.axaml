@@ -14,15 +14,10 @@
             Command="{Binding $parent[Window].RunTestCases}"
             Content="Run"
             HorizontalAlignment="Center"
-            Margin="6"
+            Margin="12"
             DockPanel.Dock="Bottom" />
-    
-    <Separator HorizontalAlignment="Stretch" 
-               Height="0.5" 
-               Background="{DynamicResource TextControlForeground}"
-               DockPanel.Dock="Bottom" />
 
-    <Panel Name="Frame" Margin="6">
+    <Panel Name="Frame" Background="WhiteSmoke" Margin="12">
       <StackPanel>
         <TextBox Text="Hello" />
         <Button Name="ClickMeButton" 

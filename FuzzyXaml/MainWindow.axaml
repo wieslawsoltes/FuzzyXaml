@@ -7,10 +7,30 @@
         Title="FuzzyXaml"
         Width="800" Height="600"
         WindowStartupLocation="CenterScreen">
-  <StackPanel>
-    <TextBox Text="Hello" />
-    <Button Name="ClickMeButton" 
-            Content="Click Me"
-            Command="{Binding $parent[Window].SomeMethod}" />
-  </StackPanel>
+
+  <DockPanel>
+    
+    <Button Name="Run" 
+            Command="{Binding $parent[Window].RunTestCases}"
+            Content="Run"
+            HorizontalAlignment="Center"
+            Margin="6"
+            DockPanel.Dock="Bottom" />
+    
+    <Separator HorizontalAlignment="Stretch" 
+               Height="0.5" 
+               Background="{DynamicResource TextControlForeground}"
+               DockPanel.Dock="Bottom" />
+
+    <Panel Name="Frame" Margin="6">
+      <StackPanel>
+        <TextBox Text="Hello" />
+        <Button Name="ClickMeButton" 
+                Content="Click Me"
+                Command="{Binding $parent[Window].SomeMethod}" />
+      </StackPanel>
+    </Panel>
+
+  </DockPanel>
+
 </Window>

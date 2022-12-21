@@ -16,9 +16,14 @@ public partial class MainWindow : Window
     {
         if (e.Key == Key.F5)
         {
-            var testCases = this.GenerateTestCases();
-            this.ExecuteTestCases(testCases);
+            RunTestCases();
         }
+    }
+
+    public void RunTestCases()
+    {
+        var testCases = Frame.GenerateTestCases();
+        Frame.ExecuteTestCases(testCases);
     }
 
     public void SomeMethod()

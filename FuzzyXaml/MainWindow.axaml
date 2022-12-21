@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen">
 
   <DockPanel>
-    
+
     <Button Name="Run" 
             Command="{Binding $parent[Window].RunTestCases}"
             Content="Run"
